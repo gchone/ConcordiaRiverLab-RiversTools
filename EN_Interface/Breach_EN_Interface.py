@@ -11,6 +11,7 @@
 # v1.0 - Mars 2017 - Création
 # v1.1 - Juin 2018 - Séparation de l'interface et du métier
 # v1.2 - Décembre 2018 - Ajout du workspace
+# v1.3 - Décembre 2018 - English version
 
 import arcpy
 from Breach import *
@@ -19,15 +20,15 @@ from Breach import *
 class Breach(object):
     def __init__(self):
 
-        self.label = "Supprimer remontées"
-        self.description = "Supprime les remontées en suivant l'écoulement"
+        self.label = "Breach"
+        self.description = "Remove bumps following a upstream to downstream profile"
         self.canRunInBackground = False
 
 
     def getParameterInfo(self):
 
         param_elevation = arcpy.Parameter(
-            displayName="Ligne d'élévations à corriger",
+            displayName="DEM to be corrected",
             name="elevationligne",
             datatype="GPRasterLayer",
             parameterType="Required",
@@ -39,13 +40,13 @@ class Breach(object):
             parameterType="Required",
             direction="Input")
         param_frompoint = arcpy.Parameter(
-            displayName="Points de départ",
+            displayName="From points",
             name="frompoint",
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
         param_breached = arcpy.Parameter(
-            displayName="Élévations corrigées",
+            displayName="Result - Corrected elevations",
             name="flowbreached",
             datatype="DERasterDataset",
             parameterType="Required",
@@ -88,6 +89,6 @@ class Breach(object):
 
         arcpy.env.scratchWorkspace =  parameters[4].valueAsText
 
-        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages)
+        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages, "EN")
 
         return

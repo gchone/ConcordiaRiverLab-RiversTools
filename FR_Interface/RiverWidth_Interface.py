@@ -8,28 +8,39 @@
 #####################################################
 
 # Versions
-# v1.0 - Mars 2017 - Création
-# v1.1 - Juin 2018 - Séparation de l'interface et du métier
+# v1.0 - Avril 2017 - Création
+# v1.1 - Juillet 2018 - Séparation de l'interface et du métier
 # v1.2 - Décembre 2018 - Ajout du workspace
 
 import arcpy
-from Breach import *
+from RiverWidth import *
 
-
-class Breach(object):
+class RiverWidth(object):
     def __init__(self):
 
-        self.label = "Supprimer remontées"
-        self.description = "Supprime les remontées en suivant l'écoulement"
+        self.label = "Largeur aux sections transversales"
+        self.description = ""
         self.canRunInBackground = False
-
 
     def getParameterInfo(self):
 
-        param_elevation = arcpy.Parameter(
-            displayName="Ligne d'élévations à corriger",
-            name="elevationligne",
+
+        param_binary = arcpy.Parameter(
+            displayName="Raster binaire des cours d'eau",
+            name="binary",
             datatype="GPRasterLayer",
+            parameterType="Required",
+            direction="Input")
+        param_cs = arcpy.Parameter(
+            displayName="Raster des sections transversales",
+            name="cs",
+            datatype="GPRasterLayer",
+            parameterType="Required",
+            direction="Input")
+        param_oriented = arcpy.Parameter(
+            displayName="Sections orientées ?",
+            name="oriented",
+            datatype="GPBoolean",
             parameterType="Required",
             direction="Input")
         param_flowdir = arcpy.Parameter(
@@ -38,15 +49,17 @@ class Breach(object):
             datatype="GPRasterLayer",
             parameterType="Required",
             direction="Input")
-        param_frompoint = arcpy.Parameter(
+
+        param_frompoints = arcpy.Parameter(
             displayName="Points de départ",
             name="frompoint",
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
-        param_breached = arcpy.Parameter(
-            displayName="Élévations corrigées",
-            name="flowbreached",
+
+        param_width = arcpy.Parameter(
+            displayName="Largeurs résultantes",
+            name="width",
             datatype="DERasterDataset",
             parameterType="Required",
             direction="Output")
@@ -59,9 +72,12 @@ class Breach(object):
 
         param0.filter.list = ["File System"]
         param0.value = arcpy.env.scratchWorkspace
-        param_frompoint.filter.list = ["Point"]
 
-        params = [param_elevation, param_flowdir, param_frompoint, param_breached, param0]
+
+        param_frompoints.filter.list = ["Point"]
+        param_oriented.value = True
+
+        params = [param_binary, param_flowdir, param_frompoints, param_cs, param_oriented, param_width, param0]
 
         return params
 
@@ -79,15 +95,16 @@ class Breach(object):
 
     def execute(self, parameters, messages):
 
+
         # Récupération des paramètres
-        str_dem = parameters[0].valueAsText
+        str_binary = parameters[0].valueAsText
         str_flowdir = parameters[1].valueAsText
-        str_frompoint = parameters[2].valueAsText
+        str_frompoints = parameters[2].valueAsText
+        str_cs = parameters[3].valueAsText
 
-        SaveResult = parameters[3].valueAsText
-
-        arcpy.env.scratchWorkspace =  parameters[4].valueAsText
-
-        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages)
+        oriented = parameters[4].valueAsText == 'true'
+        str_width = parameters[5].valueAsText
+        arcpy.env.scratchWorkspace = parameters[6].valueAsText
+        execute_RiverWith(arcpy.Raster(str_binary), arcpy.Raster(str_flowdir), str_frompoints, arcpy.Raster(str_cs), oriented, str_width, messages)
 
         return

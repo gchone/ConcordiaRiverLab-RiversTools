@@ -81,6 +81,7 @@ def execute_CS(r_flowdir, str_frompoints, distance, str_cs, messages, language =
                 Result.setValue(currentrow, currentcol, -999)
             else:
                 Result.setValue(currentrow, currentcol, 1)
+
                 lastpointdistance = totaldistance
 
             # On cherche le prochain point à partir du flow direction
@@ -148,3 +149,25 @@ def execute_CS(r_flowdir, str_frompoints, distance, str_cs, messages, language =
     arcpy.Delete_management(temp_cs)
     #arcpy.Delete_management(temp_cs2)
     return
+
+if __name__ == "__main__":
+    class message:
+        def addErrorMessage(self, txtmessage):
+            print txtmessage
+
+        def addWarningMessage(self, txtmessage):
+            print txtmessage
+    arcpy.CheckOutExtension("Spatial")
+
+    r_flowdir = arcpy.Raster(r"F:\tmp\10m_min\10m_fd")
+    str_frompoints = r"F:\tmp\10m_min\from_pnt_10km2.shp"
+
+    str_ptscs = r"F:\tmp\10m_min\test\cs_pts2.shp"
+
+
+    arcpy.env.overwriteOutput = True
+    arcpy.env.scratchWorkspace = r"F:\MSP2\tmp"
+
+    #execute_CS(r_flowdir, str_frompoints, 50, str_ptscs, message())
+    flowdir = RasterIO(r_flowdir)
+    print flowdir.getValue(1000,1001)

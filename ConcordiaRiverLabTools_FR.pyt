@@ -15,9 +15,18 @@
 from FR_Interface.FlowLength_Interface import *
 from FR_Interface.Breach_Interface import *
 from FR_Interface.Slope_Interface import *
+from FR_Interface.FromPoints_Interface import *
 from FR_Interface.CS_Interface import *
+from FR_Interface.OrientedCS_Interface import *
+from FR_Interface.ChannelDetector_Interface import *
+from FR_Interface.Flood_Interface import *
+from FR_Interface.BankfullAtCS_Interface import *
 from FR_Interface.FloatEuclideanAllocation_Interface import *
+from FR_Interface.GaussianSmooth_Interface import *
 from FR_Interface.LinearInterpolation_Interface import *
+from FR_Interface.RiverWidth_Interface import *
+from FR_Interface.WidthWatershed_Interface import *
+from FR_Interface.ResampleFlood_Interface import *
 from FR_Interface.BridgeCorrection_Interface import *
 
 
@@ -30,7 +39,7 @@ class Toolbox(object):
 
 
 
-        self.tools = [FlowLength, Breach, Slope, CS, FloatEuclidean, LinearInterpolation, BridgeCorrection]
+        self.tools = [FlowLength, Breach, Slope, FromPoints, CS, OrientedCS, Flood, BinaryRivers, FastBankfullAtCS, FloatEuclidean, GaussianSmooth, LinearInterpolation, RiverWidth, WidthWatershed, ResampleFlood, BridgeCorrection]
 
 
 

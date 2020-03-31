@@ -13,26 +13,26 @@
 
 import arcpy
 
-class FloatEuclidean(object):
+class ResampleFlood(object):
     def __init__(self):
 
-        self.label = "Allocation euclidienne pour matrice à virgule flottante"
-        self.description = ""
+        self.label = "Ré-échantilloner inondation"
+        self.description = "Ré-échantillonage d'une zone inondée ou d'un chenal sur un MNE de plus forte résolution"
         self.canRunInBackground = False
 
     def getParameterInfo(self):
 
         param_raster = arcpy.Parameter(
-            displayName="Matrice à virgule flottante",
+            displayName="Zone inondée ou chenal",
             name="raster",
             datatype="GPRasterLayer",
             parameterType="Required",
             direction="Input")
-        param_distance = arcpy.Parameter(
-            displayName="Distance",
-            name="distance",
-            datatype="GPDouble",
-            parameterType="Optional",
+        param_dem = arcpy.Parameter(
+            displayName="MNE",
+            name="dem",
+            datatype="GPRasterLayer",
+            parameterType="Required",
             direction="Input")
         param_res = arcpy.Parameter(
             displayName="Fichier de sortie",
@@ -42,7 +42,7 @@ class FloatEuclidean(object):
             direction="Output")
 
 
-        params = [param_raster, param_distance, param_res]
+        params = [param_raster, param_dem, param_res]
 
         return params
 
@@ -65,14 +65,14 @@ class FloatEuclidean(object):
         """The source code of the tool."""
 
         # Récupération des paramètres
-        str_raster = parameters[0].valueAsText
-        distance = parameters[1].valueAsText
-        if distance is not None:
-            distance = float(distance)
+        r_raster = arcpy.Raster(parameters[0].valueAsText)
+        r_dem = arcpy.Raster(parameters[1].valueAsText)
         SaveResult = parameters[2].valueAsText
 
+
         # Traitement très court, conservé ici
-        result = arcpy.sa.Float(arcpy.sa.EucAllocation(arcpy.sa.Int(arcpy.Raster(str_raster)*1000000),distance))/1000000
+        arcpy.env.cellSize = "MINOF"
+        result = arcpy.sa.SetNull(r_raster - r_dem < 0, r_raster, "VALUE = 1")
         result.save(SaveResult)
 
 

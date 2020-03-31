@@ -8,30 +8,23 @@
 #####################################################
 
 # Versions
-# v1.0 - Mars 2017 - Création
+# v1.0 - Avril 2017 - Création
 # v1.1 - Juin 2018 - Séparation de l'interface et du métier
 # v1.2 - Décembre 2018 - Ajout du workspace
+# v1.3 - Décembre 2018 - English version
 
 import arcpy
-from Breach import *
+from FlowLength import *
 
-
-class Breach(object):
+class FlowLength(object):
     def __init__(self):
 
-        self.label = "Supprimer remontées"
-        self.description = "Supprime les remontées en suivant l'écoulement"
+        self.label = "Flow length"
+        self.description = "Cumulated distance following the flow"
         self.canRunInBackground = False
-
 
     def getParameterInfo(self):
 
-        param_elevation = arcpy.Parameter(
-            displayName="Ligne d'élévations à corriger",
-            name="elevationligne",
-            datatype="GPRasterLayer",
-            parameterType="Required",
-            direction="Input")
         param_flowdir = arcpy.Parameter(
             displayName="Flow direction",
             name="flowdir",
@@ -39,16 +32,22 @@ class Breach(object):
             parameterType="Required",
             direction="Input")
         param_frompoint = arcpy.Parameter(
-            displayName="Points de départ",
+            displayName="From points",
             name="frompoint",
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
-        param_breached = arcpy.Parameter(
-            displayName="Élévations corrigées",
-            name="flowbreached",
+        param_length = arcpy.Parameter(
+            displayName="Result",
+            name="flowlength",
             datatype="DERasterDataset",
             parameterType="Required",
+            direction="Output")
+        param_riverline = arcpy.Parameter(
+            displayName="Optional result - River line",
+            name="riverline",
+            datatype="DEFeatureClass",
+            parameterType="Optional",
             direction="Output")
         param0 = arcpy.Parameter(
             displayName="Workspace",
@@ -61,33 +60,35 @@ class Breach(object):
         param0.value = arcpy.env.scratchWorkspace
         param_frompoint.filter.list = ["Point"]
 
-        params = [param_elevation, param_flowdir, param_frompoint, param_breached, param0]
+        params = [param_flowdir, param_frompoint, param_length, param_riverline, param0]
 
         return params
 
     def isLicensed(self):
-
+        """Set whether tool is licensed to execute."""
         return True
 
     def updateParameters(self, parameters):
-
+        """Modify the values and properties of parameters before internal
+        validation is performed.  This method is called whenever a parameter
+        has been changed."""
         return
 
     def updateMessages(self, parameters):
-
+        """Modify the messages created by internal validation for each tool
+        parameter.  This method is called after internal validation."""
         return
 
     def execute(self, parameters, messages):
+        """The source code of the tool."""
 
         # Récupération des paramètres
-        str_dem = parameters[0].valueAsText
-        str_flowdir = parameters[1].valueAsText
-        str_frompoint = parameters[2].valueAsText
+        str_flowdir = parameters[0].valueAsText
+        str_frompoint = parameters[1].valueAsText
+        SaveResult = parameters[2].valueAsText
+        riverline = parameters[3].valueAsText
+        arcpy.env.scratchWorkspace = parameters[4].valueAsText
+        execute_FlowLength(arcpy.Raster(str_flowdir), str_frompoint, SaveResult, riverline, messages, "EN")
 
-        SaveResult = parameters[3].valueAsText
-
-        arcpy.env.scratchWorkspace =  parameters[4].valueAsText
-
-        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages)
 
         return

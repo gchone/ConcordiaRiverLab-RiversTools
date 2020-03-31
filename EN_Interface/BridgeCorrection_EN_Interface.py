@@ -9,40 +9,42 @@
 
 # Versions
 # v1.0 - Juillet 2018 - Création
+# v1.1 - Décembre 2018 - English version
 
 
 import arcpy
 
-class FloatEuclidean(object):
+class BridgeCorrection(object):
     def __init__(self):
 
-        self.label = "Allocation euclidienne pour matrice à virgule flottante"
+        self.label = "Bridges and culverts correction"
         self.description = ""
         self.canRunInBackground = False
 
     def getParameterInfo(self):
 
         param_raster = arcpy.Parameter(
-            displayName="Matrice à virgule flottante",
+            displayName="DEM",
             name="raster",
             datatype="GPRasterLayer",
             parameterType="Required",
             direction="Input")
-        param_distance = arcpy.Parameter(
-            displayName="Distance",
-            name="distance",
-            datatype="GPDouble",
-            parameterType="Optional",
+        param_bridges = arcpy.Parameter(
+            displayName="Bridges to be corrected",
+            name="bridges",
+            datatype="GPFeatureLayer",
+            parameterType="Required",
             direction="Input")
         param_res = arcpy.Parameter(
-            displayName="Fichier de sortie",
+            displayName="Result - Corrected DEM",
             name="result",
             datatype="DERasterDataset",
             parameterType="Required",
             direction="Output")
 
+        param_bridges.filter.list = ["Polygon"]
 
-        params = [param_raster, param_distance, param_res]
+        params = [param_raster, param_bridges, param_res]
 
         return params
 
@@ -66,13 +68,13 @@ class FloatEuclidean(object):
 
         # Récupération des paramètres
         str_raster = parameters[0].valueAsText
-        distance = parameters[1].valueAsText
-        if distance is not None:
-            distance = float(distance)
+        polygons = parameters[1].valueAsText
         SaveResult = parameters[2].valueAsText
 
         # Traitement très court, conservé ici
-        result = arcpy.sa.Float(arcpy.sa.EucAllocation(arcpy.sa.Int(arcpy.Raster(str_raster)*1000000),distance))/1000000
+        arcpy.env.extent = str_raster
+        temp = arcpy.sa.ZonalStatistics(polygons, arcpy.Describe(polygons).OIDFieldName,str_raster,"MINIMUM")
+        result = arcpy.sa.Con(arcpy.sa.IsNull(temp), temp, str_raster, "VALUE = 0")
         result.save(SaveResult)
 
 

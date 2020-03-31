@@ -11,24 +11,27 @@
 # v1.0 - Mars 2017 - Création
 # v1.1 - Juin 2018 - Séparation de l'interface et du métier
 # v1.2 - Décembre 2018 - Ajout du workspace
+# v1.3 - Décembre 2018 - English version
 
 import arcpy
-from Breach import *
+from Slope import *
 
 
-class Breach(object):
+class pointflowpath:
+   pass
+
+class Slope(object):
     def __init__(self):
 
-        self.label = "Supprimer remontées"
-        self.description = "Supprime les remontées en suivant l'écoulement"
+        self.label = "Slope"
+        self.description = "Slope along flow"
         self.canRunInBackground = False
-
 
     def getParameterInfo(self):
 
-        param_elevation = arcpy.Parameter(
-            displayName="Ligne d'élévations à corriger",
-            name="elevationligne",
+        param_dem = arcpy.Parameter(
+            displayName="DEM",
+            name="DEM",
             datatype="GPRasterLayer",
             parameterType="Required",
             direction="Input")
@@ -39,15 +42,27 @@ class Breach(object):
             parameterType="Required",
             direction="Input")
         param_frompoint = arcpy.Parameter(
-            displayName="Points de départ",
+            displayName="From points",
             name="frompoint",
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
-        param_breached = arcpy.Parameter(
-            displayName="Élévations corrigées",
-            name="flowbreached",
+        param_distance = arcpy.Parameter(
+            displayName="Distance",
+            name="distance",
+            datatype="GPLong",
+            parameterType="Required",
+            direction="Input")
+        param_slope = arcpy.Parameter(
+            displayName="Result - Slope",
+            name="slope",
             datatype="DERasterDataset",
+            parameterType="Required",
+            direction="Output")
+        param_newfp = arcpy.Parameter(
+            displayName="Result - From points for slope",
+            name="newfp",
+            datatype="DEFeatureClass",
             parameterType="Required",
             direction="Output")
         param0 = arcpy.Parameter(
@@ -60,8 +75,9 @@ class Breach(object):
         param0.filter.list = ["File System"]
         param0.value = arcpy.env.scratchWorkspace
         param_frompoint.filter.list = ["Point"]
+        param_distance.value = 500
 
-        params = [param_elevation, param_flowdir, param_frompoint, param_breached, param0]
+        params = [param_dem, param_flowdir, param_frompoint, param_distance, param_slope, param_newfp,param0]
 
         return params
 
@@ -79,15 +95,15 @@ class Breach(object):
 
     def execute(self, parameters, messages):
 
+
         # Récupération des paramètres
         str_dem = parameters[0].valueAsText
         str_flowdir = parameters[1].valueAsText
         str_frompoint = parameters[2].valueAsText
-
-        SaveResult = parameters[3].valueAsText
-
-        arcpy.env.scratchWorkspace =  parameters[4].valueAsText
-
-        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages)
+        distancesmoothingpath = int(parameters[3].valueAsText)
+        save_slope = parameters[4].valueAsText
+        save_newfp = parameters[5].valueAsText
+        arcpy.env.scratchWorkspace = parameters[6].valueAsText
+        execute_Slope(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, distancesmoothingpath, save_slope, save_newfp, messages,"EN")
 
         return

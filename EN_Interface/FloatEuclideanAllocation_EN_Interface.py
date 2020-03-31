@@ -9,21 +9,21 @@
 
 # Versions
 # v1.0 - Juillet 2018 - Création
-
+# v1.1 - Décembre 2018 - English version
 
 import arcpy
 
 class FloatEuclidean(object):
     def __init__(self):
 
-        self.label = "Allocation euclidienne pour matrice à virgule flottante"
+        self.label = "Euclidean Allocation for Float rasters"
         self.description = ""
         self.canRunInBackground = False
 
     def getParameterInfo(self):
 
         param_raster = arcpy.Parameter(
-            displayName="Matrice à virgule flottante",
+            displayName="Raster",
             name="raster",
             datatype="GPRasterLayer",
             parameterType="Required",
@@ -35,7 +35,7 @@ class FloatEuclidean(object):
             parameterType="Optional",
             direction="Input")
         param_res = arcpy.Parameter(
-            displayName="Fichier de sortie",
+            displayName="Result",
             name="result",
             datatype="DERasterDataset",
             parameterType="Required",

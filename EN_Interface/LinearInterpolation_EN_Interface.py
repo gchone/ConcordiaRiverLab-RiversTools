@@ -8,30 +8,27 @@
 #####################################################
 
 # Versions
-# v1.0 - Mars 2017 - Création
-# v1.1 - Juin 2018 - Séparation de l'interface et du métier
-# v1.2 - Décembre 2018 - Ajout du workspace
+# v1.0 - Juillet 2018 - Création
+# v1.1 - Décembre 2018 - Ajout du workspace
+# v1.2 - Décembre 2018 - English version
 
 import arcpy
-from Breach import *
+from LinearInterpolation import *
 
 
-class Breach(object):
+class pointflowpath:
+   pass
+
+class LinearInterpolation(object):
     def __init__(self):
 
-        self.label = "Supprimer remontées"
-        self.description = "Supprime les remontées en suivant l'écoulement"
+        self.label = "Linear interpolation"
+        self.description = "Linear interpolation along flow path"
         self.canRunInBackground = False
-
 
     def getParameterInfo(self):
 
-        param_elevation = arcpy.Parameter(
-            displayName="Ligne d'élévations à corriger",
-            name="elevationligne",
-            datatype="GPRasterLayer",
-            parameterType="Required",
-            direction="Input")
+
         param_flowdir = arcpy.Parameter(
             displayName="Flow direction",
             name="flowdir",
@@ -39,14 +36,22 @@ class Breach(object):
             parameterType="Required",
             direction="Input")
         param_frompoint = arcpy.Parameter(
-            displayName="Points de départ",
+            displayName="From points",
             name="frompoint",
             datatype="GPFeatureLayer",
             parameterType="Required",
             direction="Input")
-        param_breached = arcpy.Parameter(
-            displayName="Élévations corrigées",
-            name="flowbreached",
+        param_values = arcpy.Parameter(
+            displayName="Values to interpolate",
+            name="values",
+            datatype="GPRasterLayer",
+            parameterType="Required",
+            direction="Input")
+
+
+        param_interpolatedbkf = arcpy.Parameter(
+            displayName="Result - Interpolated values",
+            name="interpolated_values",
             datatype="DERasterDataset",
             parameterType="Required",
             direction="Output")
@@ -61,7 +66,8 @@ class Breach(object):
         param0.value = arcpy.env.scratchWorkspace
         param_frompoint.filter.list = ["Point"]
 
-        params = [param_elevation, param_flowdir, param_frompoint, param_breached, param0]
+        params = [param_flowdir, param_frompoint, param_values, param_interpolatedbkf,param0]
+
 
         return params
 
@@ -79,15 +85,14 @@ class Breach(object):
 
     def execute(self, parameters, messages):
 
+
         # Récupération des paramètres
-        str_dem = parameters[0].valueAsText
-        str_flowdir = parameters[1].valueAsText
-        str_frompoint = parameters[2].valueAsText
-
+        str_flowdir = parameters[0].valueAsText
+        str_frompoint = parameters[1].valueAsText
+        str_values = parameters[2].valueAsText
         SaveResult = parameters[3].valueAsText
+        arcpy.env.scratchWorkspace = parameters[4].valueAsText
+        execute_LinearInterpolation(arcpy.Raster(str_flowdir), str_frompoint, arcpy.Raster(str_values), SaveResult, messages, "EN")
 
-        arcpy.env.scratchWorkspace =  parameters[4].valueAsText
-
-        execute_Breach(arcpy.Raster(str_dem), arcpy.Raster(str_flowdir), str_frompoint, SaveResult, messages)
 
         return
