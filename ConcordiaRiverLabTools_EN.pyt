@@ -30,7 +30,7 @@ from EN_Interface.RiverWidth_EN_Interface import *
 from EN_Interface.WidthWatershed_EN_Interface import *
 from EN_Interface.ResampleFlood_EN_Interface import *
 from EN_Interface.BridgeCorrection_EN_Interface import *
-
+from EN_Interface.D8toD4_EN_Interface import *
 
 
 class Toolbox(object):
@@ -41,7 +41,7 @@ class Toolbox(object):
 
 
 
-        self.tools = [FlowLength, Breach, Slope, FromPoints, CS, OrientedCS, Flood, BinaryRivers, FastBankfullAtCS, FloatEuclidean, GaussianSmooth, LinearInterpolation, RiverWidth, WidthWatershed, ResampleFlood, BridgeCorrection]
+        self.tools = [D8toD4, FlowLength, Breach, Slope, FromPoints, CS, OrientedCS, Flood, BinaryRivers, FastBankfullAtCS, FloatEuclidean, GaussianSmooth, LinearInterpolation, RiverWidth, WidthWatershed, ResampleFlood, BridgeCorrection]
 
 
 
