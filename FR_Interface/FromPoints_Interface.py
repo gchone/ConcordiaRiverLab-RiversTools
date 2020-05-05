@@ -10,6 +10,7 @@
 # Versions
 # v1.0 - Mars 2017 - Création
 # v1.1 - Juin 2018 - Séparation de l'interface et du métier
+# v1.2 - Mai 2020 - Aire en float
 
 import arcpy
 from FromPoints import *
@@ -33,7 +34,7 @@ class FromPoints(object):
         param_area = arcpy.Parameter(
             displayName="Aire drainée minimale de traitement (en km2)",
             name="area",
-            datatype="GPLong",
+            datatype="GPDouble",
             parameterType="Required",
             direction="Input")
         param_frompoints = arcpy.Parameter(
