@@ -10,9 +10,10 @@
 # Versions
 # v1.0 - Juillet 2018 - Création
 # v1.1 - Décembre 2018 - English version
-
+# v1.2 - Mai 2020 - Externalisation du code metier
 
 import arcpy
+from BridgeCorrection import *
 
 class BridgeCorrection(object):
     def __init__(self):
@@ -71,11 +72,7 @@ class BridgeCorrection(object):
         polygons = parameters[1].valueAsText
         SaveResult = parameters[2].valueAsText
 
-        # Traitement très court, conservé ici
-        arcpy.env.extent = str_raster
-        temp = arcpy.sa.ZonalStatistics(polygons, arcpy.Describe(polygons).OIDFieldName,str_raster,"MINIMUM")
-        result = arcpy.sa.Con(arcpy.sa.IsNull(temp), temp, str_raster, "VALUE = 0")
-        result.save(SaveResult)
+        execute_BridgeCorrection(arcpy.Raster(str_raster), polygons, SaveResult, messages, language="EN")
 
 
         return
