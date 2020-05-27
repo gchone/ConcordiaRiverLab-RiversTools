@@ -12,6 +12,7 @@
 # v1.1 - Juillet 2018 - Séparation de l'interface et du métier, séparation de la création des points et de l'orientation
 #  des sections transversales, correction d'un bug lorsque la variance est nulle
 # v1.2 - Aout 2018 - Bog après les confluences corrigé
+# v1.3 - Mai 2020 - Coordinate system = dem
 
 import arcpy
 import numpy
@@ -23,6 +24,8 @@ class pointflowpath:
 
 
 def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, str_cs, messages, language = "FR"):
+
+    arcpy.env.outputCoordinateSystem = r_flowdir.spatialReference
 
     # Chargement des fichiers
     flowdir = RasterIO(r_flowdir)

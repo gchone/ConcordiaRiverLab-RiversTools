@@ -48,12 +48,17 @@ class D8toD4(object):
             datatype="GPRasterLayer",
             parameterType="Required",
             direction="Output")
+        param0 = arcpy.Parameter(
+            displayName="Workspace",
+            name="in_workspace",
+            datatype="DEWorkspace",
+            parameterType="Required",
+            direction="Input")
 
 
 
 
-
-        params = [param_flowdir, param_dem, param_frompoint, param_d4fd]
+        params = [param_flowdir, param_dem, param_frompoint, param_d4fd, param0]
 
         return params
 
@@ -76,6 +81,7 @@ class D8toD4(object):
         str_dem = parameters[1].valueAsText
         str_frompoint = parameters[2].valueAsText
         SaveResult = parameters[3].valueAsText
+        arcpy.env.scratchWorkspace = parameters[4].valueAsText
 
         execute_D8toD4(arcpy.Raster(str_flowdir), arcpy.Raster(str_dem), str_frompoint, SaveResult, messages, language="EN")
 
