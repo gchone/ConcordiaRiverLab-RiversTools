@@ -67,10 +67,10 @@ def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, 
         intheraster = True
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                      flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                      flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                      flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                      flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                      flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                      flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
 
@@ -137,14 +137,14 @@ def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, 
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                          flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                          flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                          flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                          flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                          flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                          flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> Result.nodata):
+                if (Result.getValue(currentrow, currentcol) != Result.nodata):
                     # Atteinte d'un point déjà traité
                     if confluencedist == 0:
                         confluencedist = totaldistance + currentdistance
@@ -164,7 +164,7 @@ def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, 
 
             currentpoint = listpointsflowpath[currentpointnumber]
 
-            if temprastercs.getValue(currentpoint.row, currentpoint.col) <> temprastercs.nodata:
+            if temprastercs.getValue(currentpoint.row, currentpoint.col) != temprastercs.nodata:
                 # Point pour lequel on doit calculer l'orientation de la section transversale
 
 
@@ -205,7 +205,7 @@ def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, 
 
                     slope = 0
 
-                    if (covarxy <> 0 and varx > 0 and vary > 0):
+                    if (covarxy != 0 and varx > 0 and vary > 0):
                         # Formule pour la régression par axe majeur : Legendre et Legendre, 1998, Numerical Ecology, 2ème édition (p.507)
                         slope = (vary-varx+math.sqrt((vary-varx)**2+4*covarxy**2))/(2*covarxy)
                         angle = math.atan2(slope, 1)

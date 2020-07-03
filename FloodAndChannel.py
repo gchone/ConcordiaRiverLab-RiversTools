@@ -76,12 +76,12 @@ def execute_FloodAndChannel(r_dem, r_elevation, r_flowdir, r_slope, str_frompoin
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                      flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow,
-                                                                                         currentcol) <> 8 and
-                      flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow,
-                                                                                          currentcol) <> 32 and flowdir.getValue(
-            currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                      flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow,
+                                                                                         currentcol) != 8 and
+                      flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow,
+                                                                                          currentcol) != 32 and flowdir.getValue(
+            currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
 
@@ -130,17 +130,17 @@ def execute_FloodAndChannel(r_dem, r_elevation, r_flowdir, r_slope, str_frompoin
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow,
-                                                                                     currentcol) <> 2 and
-                          flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow,
-                                                                                             currentcol) <> 8 and
-                          flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow,
-                                                                                              currentcol) <> 32 and flowdir.getValue(
-                currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow,
+                                                                                     currentcol) != 2 and
+                          flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow,
+                                                                                             currentcol) != 8 and
+                          flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow,
+                                                                                              currentcol) != 32 and flowdir.getValue(
+                currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> Result.nodata):
+                if (Result.getValue(currentrow, currentcol) != Result.nodata):
                     # Atteinte d'un confluent
                     intheraster = False
 
@@ -172,7 +172,7 @@ def execute_FloodAndChannel(r_dem, r_elevation, r_flowdir, r_slope, str_frompoin
 
                     try:
                         # Si la cellule voisine existe et n'a pas déjà été testée...
-                        if (Result.getValue(neighbourrow, neighbourcol) == Result.nodata) and dem.getValue(neighbourrow, neighbourcol)<> dem.nodata:
+                        if (Result.getValue(neighbourrow, neighbourcol) == Result.nodata) and dem.getValue(neighbourrow, neighbourcol)!= dem.nodata:
                             testslope = True
                             if slope is not None:
                                 testslope = slope.getValue(neighbourrow, neighbourcol) < threshold_slope

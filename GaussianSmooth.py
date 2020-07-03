@@ -66,9 +66,9 @@ def execute_GaussianSmooth(r_flowdir, str_frompoint, r_values, gaussiansigma, nb
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
         listflowpath = []
@@ -91,7 +91,7 @@ def execute_GaussianSmooth(r_flowdir, str_frompoint, r_values, gaussiansigma, nb
             listflowpath.append(totaldistance)
 
             # On crée une liste des points d'élévation connue le long de l'écoulement, ainsi qu'une liste associée avec leur distance depuis le point de distance
-            if valuesraster.getValue(currentrow, currentcol) <> valuesraster.nodata:
+            if valuesraster.getValue(currentrow, currentcol) != valuesraster.nodata:
                 listdistance.append(totaldistance)
                 listelevation.append(valuesraster.getValue(currentrow, currentcol))
 
@@ -134,13 +134,13 @@ def execute_GaussianSmooth(r_flowdir, str_frompoint, r_values, gaussiansigma, nb
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     if confluencedist == 0:
                         confluencedist = totaldistance + currentdistance

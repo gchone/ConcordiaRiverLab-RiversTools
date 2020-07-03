@@ -20,9 +20,7 @@ class pointflowpath:
    pass
 
 
-def execute_LinearInterpolation(r_flowdir, str_frompoint, r_values, str_results, messages, language= "FR"):
-
-
+def execute_LinearInterpolation(r_flowdir, str_frompoint, r_values, str_results, messages, language="FR"):
 
     # Chargement des fichiers
     flowdir = RasterIO(r_flowdir)
@@ -64,9 +62,9 @@ def execute_LinearInterpolation(r_flowdir, str_frompoint, r_values, str_results,
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
 
@@ -90,7 +88,7 @@ def execute_LinearInterpolation(r_flowdir, str_frompoint, r_values, str_results,
 
 
             # On crée une liste des points d'élévation connue le long de l'écoulement, ainsi qu'une liste associée avec leur distance depuis le point de distance
-            if bkfatcs.getValue(currentrow, currentcol) <> bkfatcs.nodata:
+            if bkfatcs.getValue(currentrow, currentcol) != bkfatcs.nodata:
                 if confluence:
                     # point après atteinte d'une confluence. On arrête le traitement
                     intheraster = False
@@ -140,13 +138,13 @@ def execute_LinearInterpolation(r_flowdir, str_frompoint, r_values, str_results,
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     # On continue encore jusqu'au prochain point
                     confluence = True

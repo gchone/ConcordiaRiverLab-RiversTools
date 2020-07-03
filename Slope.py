@@ -66,9 +66,9 @@ def execute_Slope(r_dem, r_flowdir, str_frompoint, distancesmoothingpath, save_s
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=FlowDir.raster.width or currentrow<0 or currentrow>= FlowDir.raster.height:
             intheraster = False
-        elif (FlowDir.getValue(currentrow, currentcol) <> 1 and FlowDir.getValue(currentrow, currentcol) <> 2 and
-                            FlowDir.getValue(currentrow, currentcol) <> 4 and FlowDir.getValue(currentrow, currentcol) <> 8 and
-                            FlowDir.getValue(currentrow, currentcol) <> 16 and FlowDir.getValue(currentrow, currentcol) <> 32 and FlowDir.getValue(currentrow, currentcol) <> 64 and FlowDir.getValue(currentrow, currentcol) <> 128):
+        elif (FlowDir.getValue(currentrow, currentcol) != 1 and FlowDir.getValue(currentrow, currentcol) != 2 and
+                            FlowDir.getValue(currentrow, currentcol) != 4 and FlowDir.getValue(currentrow, currentcol) != 8 and
+                            FlowDir.getValue(currentrow, currentcol) != 16 and FlowDir.getValue(currentrow, currentcol) != 32 and FlowDir.getValue(currentrow, currentcol) != 64 and FlowDir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
 
@@ -133,13 +133,13 @@ def execute_Slope(r_dem, r_flowdir, str_frompoint, distancesmoothingpath, save_s
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= FlowDir.raster.width or currentrow < 0 or currentrow >= FlowDir.raster.height:
                 intheraster = False
-            elif (FlowDir.getValue(currentrow, currentcol) <> 1 and FlowDir.getValue(currentrow, currentcol) <> 2 and
-                            FlowDir.getValue(currentrow, currentcol) <> 4 and FlowDir.getValue(currentrow, currentcol) <> 8 and
-                            FlowDir.getValue(currentrow, currentcol) <> 16 and FlowDir.getValue(currentrow, currentcol) <> 32 and FlowDir.getValue(currentrow, currentcol) <> 64 and FlowDir.getValue(currentrow, currentcol) <> 128):
+            elif (FlowDir.getValue(currentrow, currentcol) != 1 and FlowDir.getValue(currentrow, currentcol) != 2 and
+                            FlowDir.getValue(currentrow, currentcol) != 4 and FlowDir.getValue(currentrow, currentcol) != 8 and
+                            FlowDir.getValue(currentrow, currentcol) != 16 and FlowDir.getValue(currentrow, currentcol) != 32 and FlowDir.getValue(currentrow, currentcol) != 64 and FlowDir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     if confluencedist == 0:
                         confluencedist = totaldistance + currentdistance

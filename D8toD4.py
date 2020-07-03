@@ -46,9 +46,9 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
         # Traitement effectué sur chaque cellule le long de l'écoulement
@@ -83,7 +83,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         # On modifie donc le flow direction pour aller à droite
                         Result.setValue(currentrow, currentcol, 1)
                         # Puis on modifie le flow direction du la cellule à droite pour aller en bas
-                        if (Result.getValue(currentrow, currentcol+1) <> -255):
+                        if (Result.getValue(currentrow, currentcol+1) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -92,7 +92,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
                     else:
                         Result.setValue(currentrow, currentcol, 4)
-                        if (Result.getValue(currentrow+1, currentcol) <> -255):
+                        if (Result.getValue(currentrow+1, currentcol) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -117,7 +117,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 else:
                     if dem.getValue(currentrow+1, currentcol) < dem.getValue(currentrow, currentcol-1):
                         Result.setValue(currentrow, currentcol, 4)
-                        if (Result.getValue(currentrow+1, currentcol) <> -255):
+                        if (Result.getValue(currentrow+1, currentcol) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -125,7 +125,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                             lastdir = 16
                     else:
                         Result.setValue(currentrow, currentcol, 16)
-                        if (Result.getValue(currentrow, currentcol-1) <> -255):
+                        if (Result.getValue(currentrow, currentcol-1) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -150,7 +150,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 else:
                     if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol-1):
                         Result.setValue(currentrow, currentcol, 64)
-                        if (Result.getValue(currentrow-1, currentcol) <> -255):
+                        if (Result.getValue(currentrow-1, currentcol) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -158,7 +158,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                             lastdir = 16
                     else:
                         Result.setValue(currentrow, currentcol, 16)
-                        if (Result.getValue(currentrow, currentcol-1) <> -255):
+                        if (Result.getValue(currentrow, currentcol-1) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -183,7 +183,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 else:
                     if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol+1):
                         Result.setValue(currentrow, currentcol, 64)
-                        if (Result.getValue(currentrow-1, currentcol) <> -255):
+                        if (Result.getValue(currentrow-1, currentcol) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -191,7 +191,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                             lastdir = 1
                     else:
                         Result.setValue(currentrow, currentcol, 1)
-                        if (Result.getValue(currentrow, currentcol+1) <> -255):
+                        if (Result.getValue(currentrow, currentcol+1) != -255):
                             # Atteinte d'un confluent
                             intheraster = False
                         else:
@@ -203,13 +203,13 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     intheraster = False
 

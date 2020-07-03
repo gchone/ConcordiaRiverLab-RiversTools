@@ -71,17 +71,17 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                      flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                      flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                      flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                      flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                      flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                      flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
         # Traitement effectué sur chaque cellule le long de l'écoulement
         while (intheraster):
 
             # Traitement effectué sur chaque section transversale
-            if cs.getValue(currentrow,currentcol) <> cs.nodata:
+            if cs.getValue(currentrow,currentcol) != cs.nodata:
 
 
                 zmin = dem.getValue(currentrow,currentcol)
@@ -125,7 +125,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
                         # localz : élévation du sol pour le point testé le long de la section transversale
                         localz = dem.getValue(currentrow + rowinc, currentcol + colinc)
                         # on arrête d'avancer le long de la section transversale quand l'élévation devient plus grande que l'élévation plein-bord testée (ou si on sort du raster)
-                        if localz <> dem.nodata:
+                        if localz != dem.nodata:
                             if localz < prevz:
                                 localz = prevz
                             if localz >= currentz:
@@ -145,7 +145,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
                             # Toutes les élévations sauf la dernière.
                             # Aire = panneau trapezoidale
                             sumh+= (currentz-listh[i-1]+currentz-listh[i])/2
-                        elif listh[i]<>dem.nodata:
+                        elif listh[i]!=dem.nodata:
                             # Dernière élévation : plus haute que currentz.
                             # Aire = formule pour le petit triangle
                             sumh += (currentz-listh[i-1])*(currentz-listh[i-1])/(listh[i]-listh[i-1])/2
@@ -176,7 +176,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
 
 
 
-                        if localz <> dem.nodata:
+                        if localz != dem.nodata:
                             if localz < prevz2:
                                 localz = prevz2
                             if localz >= currentz:
@@ -193,7 +193,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
                     for i in range(1, len(listh)):
                         if i < len(listh) - 1:
                             sumh2 += (currentz - listh[i - 1] + currentz - listh[i]) / 2
-                        elif listh[i] <> dem.nodata:
+                        elif listh[i] != dem.nodata:
                             sumh2 += (currentz - listh[i - 1]) * (currentz - listh[i - 1]) / (
                             listh[i] - listh[i - 1]) / 2
                             step2 -= 1
@@ -201,12 +201,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
                         else:
                             step2-=1
 
-                    if (step + step2) == 0:
-                        print step
-                        print step2
-                        print localz
-                        print zmin
-                        print angle
+
 
                     # Calcul de la profondeur moyenne
                     # Note: erreur de +1 au lieu de -1 ds la version EPRI1
@@ -260,14 +255,14 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                          flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                          flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                          flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                          flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                          flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                          flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     intheraster = False
 
@@ -278,29 +273,4 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
 
     return
 
-if __name__ == "__main__":
-    class message:
-        def addErrorMessage(self, txtmessage):
-            print txtmessage
 
-        def addWarningMessage(self, txtmessage):
-            print txtmessage
-    arcpy.CheckOutExtension("Spatial")
-
-    r_dem = arcpy.Raster(r"F:\MSP2\Chaudiere\dem10mavg")
-    r_flowdir = arcpy.Raster(r"F:\MSP2\Chaudiere\burn\flowdir")
-    str_frompoints = r"F:\MSP2\Chaudiere\fromPoint.shp"
-
-    r_cs = arcpy.Raster(r"F:\MSP2\Chaudiere\HAND\oriented")
-
-    p_detect = 0
-    thresholdz = 6
-    increment = 0.1
-    str_bkf = r"F:\MSP2\Chaudiere\HAND\cf_bkf"
-
-
-    arcpy.env.overwriteOutput = True
-    arcpy.env.scratchWorkspace = r"F:\MSP2\tmp"
-
-
-    execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thresholdz, increment, str_bkf, message())

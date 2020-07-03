@@ -62,9 +62,9 @@ def execute_MovingWindowStats(r_flowdir, str_frompoint, r_values, distance, func
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
         listflowpath = []
@@ -87,7 +87,7 @@ def execute_MovingWindowStats(r_flowdir, str_frompoint, r_values, distance, func
             listflowpath.append(totaldistance)
 
             # On crée une liste des points d'élévation connue le long de l'écoulement, ainsi qu'une liste associée avec leur distance depuis le point de distance
-            if valuesraster.getValue(currentrow, currentcol) <> valuesraster.nodata:
+            if valuesraster.getValue(currentrow, currentcol) != valuesraster.nodata:
                 listdistance.append(totaldistance)
                 listelevation.append(valuesraster.getValue(currentrow, currentcol))
 
@@ -130,13 +130,13 @@ def execute_MovingWindowStats(r_flowdir, str_frompoint, r_values, distance, func
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                            flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                            flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                            flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                            flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     intheraster = False
 
         if len(listdistance) <= 1:
@@ -173,38 +173,3 @@ def execute_MovingWindowStats(r_flowdir, str_frompoint, r_values, distance, func
 
     return
 
-class message:
-    def addErrorMessage(self, txtmessage):
-        print txtmessage
-    def addWarningMessage(self, txtmessage):
-        print txtmessage
-
-if __name__ == "__main__":
-    arcpy.CheckOutExtension("Spatial")
-    arcpy.env.overwriteOutput = True
-    arcpy.env.scratchWorkspace = r"F:\MSP2\tmp"
-
-    str_frompoint = r"F:\MSP2\Yamaska\demnov18\pointspourmesuresws\frompoint50km.shp"
-    r_flowdir =  arcpy.Raster(r"F:\MSP2\Yamaska\demnov18\flowdir")
-    r_values = arcpy.Raster(r"F:\MSP2\Yamaska\demnov18\pointspourmesuresws\slope100")
-    distance = 500
-    SaveResult = r"F:\MSP2\Yamaska\demnov18\pointspourmesuresws\varslope2"
-
-
-    def stdev(list):
-        try:
-            mean = 0
-            for value in list:
-                mean += value
-            mean = mean / len(list)
-            var = 0
-            for value in list:
-                var += (value - mean)*(value - mean)
-            var = var / len(list)
-
-            return math.sqrt(var)
-        except Exception:
-            return None
-
-    mymessage = message()
-    execute_MovingWindowStats(r_flowdir, str_frompoint, r_values, distance, stdev, SaveResult, mymessage)

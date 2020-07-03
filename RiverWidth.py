@@ -62,10 +62,10 @@ def execute_RiverWith(r_binary, r_flowdir, str_frompoints, r_cs, oriented, str_w
         # Tests de sécurité pour s'assurer que le point de départ est à l'intérieurs des rasters
         if currentcol<0 or currentcol>=flowdir.raster.width or currentrow<0 or currentrow>= flowdir.raster.height:
             intheraster = False
-        elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                      flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                      flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                      flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+        elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                      flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                      flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                      flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
             intheraster = False
 
         # Traitement effectué sur chaque cellule le long de l'écoulement
@@ -76,7 +76,7 @@ def execute_RiverWith(r_binary, r_flowdir, str_frompoints, r_cs, oriented, str_w
             rowbinary = binary.YtoRow(flowdir.RowtoY(currentrow))
 
             angle = cs.getValue(currentrow,currentcol)
-            if angle <> cs.nodata:
+            if angle != cs.nodata:
 
                 if oriented:
                     # calcul de la ligne et de la colonne du prochain point dans l'axe de la section transversale
@@ -91,14 +91,14 @@ def execute_RiverWith(r_binary, r_flowdir, str_frompoints, r_cs, oriented, str_w
 
                     step = 0
 
-                    while binary.getValue(rowbinary + int(rowinc*step),colbinary + int(colinc*step)) <> binary.nodata:
+                    while binary.getValue(rowbinary + int(rowinc*step),colbinary + int(colinc*step)) != binary.nodata:
                         step += 1
 
                     # on répète les opérations précédentes en progressant dans l'autre sens le long de la section transversale
                     step2 = 0
 
 
-                    while binary.getValue(rowbinary - int(rowinc*step2), colbinary - int(colinc*step2)) <> binary.nodata:
+                    while binary.getValue(rowbinary - int(rowinc*step2), colbinary - int(colinc*step2)) != binary.nodata:
                         step2 += 1
 
                     # if the process was not interrupted because an edge was reached
@@ -144,11 +144,11 @@ def execute_RiverWith(r_binary, r_flowdir, str_frompoints, r_cs, oriented, str_w
                             colinc = -1
 
                         while binary.getValue(rowbinary + int(rowinc * step),
-                                              colbinary + int(colinc * step)) <> binary.nodata:
+                                              colbinary + int(colinc * step)) != binary.nodata:
                             step += 1
 
                         while binary.getValue(rowbinary - int(rowinc * step2),
-                                              colbinary - int(colinc * step2)) <> binary.nodata:
+                                              colbinary - int(colinc * step2)) != binary.nodata:
                             step2 += 1
 
                         width = None
@@ -206,14 +206,14 @@ def execute_RiverWith(r_binary, r_flowdir, str_frompoints, r_cs, oriented, str_w
             # Tests de sécurité pour s'assurer que l'on ne sorte pas des rasters
             if currentcol < 0 or currentcol >= flowdir.raster.width or currentrow < 0 or currentrow >= flowdir.raster.height:
                 intheraster = False
-            elif (flowdir.getValue(currentrow, currentcol) <> 1 and flowdir.getValue(currentrow, currentcol) <> 2 and
-                          flowdir.getValue(currentrow, currentcol) <> 4 and flowdir.getValue(currentrow, currentcol) <> 8 and
-                          flowdir.getValue(currentrow, currentcol) <> 16 and flowdir.getValue(currentrow, currentcol) <> 32 and
-                          flowdir.getValue(currentrow, currentcol) <> 64 and flowdir.getValue(currentrow, currentcol) <> 128):
+            elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
+                          flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
+                          flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and
+                          flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) <> -255):
+                if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
                     intheraster = False
 
