@@ -44,7 +44,7 @@ def execute_FloodAndChannel(r_dem, r_elevation, r_flowdir, r_slope, str_frompoin
 
     # Fichier temporaire créé dans le "Scratch folder"
     randomname = binascii.hexlify(os.urandom(6))
-    temp_flood = arcpy.env.scratchWorkspace + "\\" + randomname
+    temp_flood = arcpy.env.scratchWorkspace + "\\" + str(randomname)
     Result = RasterIO(r_dem, temp_flood, float,-255)
 
     # Décompte du nombre de points de départ pour configurer de la barre de progression

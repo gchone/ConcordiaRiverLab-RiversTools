@@ -27,7 +27,7 @@ def execute_CS(r_flowdir, str_frompoints, distance, str_cs, messages, language =
 
     # Fichier temporaire créé dans le "Scratch folder"
     randomname = binascii.hexlify(os.urandom(6))
-    temp_cs = arcpy.env.scratchWorkspace + "\\" + randomname
+    temp_cs = arcpy.env.scratchWorkspace + "\\" + str(randomname)
     Result = RasterIO(r_flowdir, temp_cs, float, -255)
 
     # Décompte du nombre de points de départ pour configurer de la barre de progression
