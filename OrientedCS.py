@@ -32,7 +32,7 @@ def execute_orientedCS(r_flowdir, str_frompoints, str_ptscs, smoothingdistance, 
 
     arcpy.env.extent = r_flowdir
     arcpy.env.snapRaster = r_flowdir
-    randomname = binascii.hexlify(os.urandom(6))
+    randomname = binascii.hexlify(os.urandom(6)).decode()
     temp_cs2 = arcpy.env.scratchWorkspace + "\\" + str(randomname)
     arcpy.PointToRaster_conversion(str_ptscs, arcpy.Describe(str_ptscs).OIDFieldName, temp_cs2, cellsize=r_flowdir)
     temprastercs = RasterIO(arcpy.Raster(temp_cs2))

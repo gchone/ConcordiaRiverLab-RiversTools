@@ -43,7 +43,7 @@ def execute_FloodAndChannel(r_dem, r_elevation, r_flowdir, r_slope, str_frompoin
         messages.addErrorMessage(e.message)
 
     # Fichier temporaire créé dans le "Scratch folder"
-    randomname = binascii.hexlify(os.urandom(6))
+    randomname = binascii.hexlify(os.urandom(6))  .decode()
     temp_flood = arcpy.env.scratchWorkspace + "\\" + str(randomname)
     Result = RasterIO(r_dem, temp_flood, float,-255)
 
