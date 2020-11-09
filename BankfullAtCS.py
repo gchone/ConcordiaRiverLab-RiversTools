@@ -38,7 +38,7 @@ def execute_BankfullAtCS(r_dem, r_flowdir, str_frompoints, r_cs, p_detect, thres
         dem.checkMatch(flowdir)
         dem.checkMatch(cs)
     except Exception as e:
-        messages.addErrorMessage(e.message)
+        messages.addErrorMessage(str(e))
 
     Result = RasterIO(r_dem, str_bkf, float,-255)
 

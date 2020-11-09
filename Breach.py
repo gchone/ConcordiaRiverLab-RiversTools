@@ -25,7 +25,7 @@ def execute_Breach(r_dem, r_flowdir, str_frompoint, SaveResult, messages, langua
     try:
         dem.checkMatch(flowdir)
     except Exception as e:
-        messages.addErrorMessage(e.message)
+        messages.addErrorMessage(str(e))
     Result = RasterIO(r_flowdir, SaveResult, float,-255)
 
     # Traitement effectué pour chaque point de départ
@@ -49,6 +49,8 @@ def execute_Breach(r_dem, r_flowdir, str_frompoint, SaveResult, messages, langua
         elif (flowdir.getValue(currentrow, currentcol) != 1 and flowdir.getValue(currentrow, currentcol) != 2 and
                             flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
                             flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
+            intheraster = False
+        if dem.getValue(currentrow, currentcol) == dem.nodata:
             intheraster = False
 
         confluence = False
@@ -107,7 +109,8 @@ def execute_Breach(r_dem, r_flowdir, str_frompoint, SaveResult, messages, langua
                             flowdir.getValue(currentrow, currentcol) != 4 and flowdir.getValue(currentrow, currentcol) != 8 and
                             flowdir.getValue(currentrow, currentcol) != 16 and flowdir.getValue(currentrow, currentcol) != 32 and flowdir.getValue(currentrow, currentcol) != 64 and flowdir.getValue(currentrow, currentcol) != 128):
                 intheraster = False
-
+            if dem.getValue(currentrow, currentcol) == dem.nodata:
+                intheraster = False
             if intheraster:
                 if (Result.getValue(currentrow, currentcol) != -255):
                     # Atteinte d'un confluent
