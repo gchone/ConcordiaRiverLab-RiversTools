@@ -17,6 +17,23 @@
 from RasterIO import *
 
 
+class __Frompoint_paths:
+
+    def __init__(self):
+        self.donepts = {}
+
+    def add_point(self, row, col, fp_id):
+        if row not in self.donepts.keys():
+            self.donepts[row] = {}
+        self.donepts[row][col] = fp_id
+
+    def done_previously(self, row, col, fp_id):
+        try:
+            return self.donepts[row][col] != fp_id
+        except KeyError:
+            return False
+
+
 def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, language = "FR"):
     """The source code of the tool."""
 
@@ -31,8 +48,10 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
     Result = RasterIO(r_flowdir, str_result, int, -255)
 
+    donepoints = __Frompoint_paths()
+
     # Traitement effectué pour chaque point de départ
-    frompointcursor = arcpy.da.SearchCursor(str_frompoint, "SHAPE@")
+    frompointcursor = arcpy.da.SearchCursor(str_frompoint, ["SHAPE@", "OID@"])
     for frompoint in frompointcursor:
 
         # On prend l'objet géométrique (le point) associé à la ligne dans la table
@@ -58,7 +77,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
             # On regarde la valeur du "flow direction"
             direction = flowdir.getValue(currentrow, currentcol)
-
+            donepoints.add_point(currentrow, currentcol, frompoint[1])
             # Si cette valeur est 1, 4, 16 ou 64, on se déplace sur des cases adjacentes. On garde la valeur.
             # Si cette valeur est 2, 8, 32 ou 128, on se déplace en diagonale. Un traitement est nécesaire.
 
@@ -78,7 +97,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                     # On modifie donc le flow direction pour aller à droite
                     Result.setValue(currentrow, currentcol, 1)
                     # Puis on modifie le flow direction du la cellule à droite pour aller en bas
-                    if (Result.getValue(currentrow, currentcol+1) != -255):
+                    if donepoints.done_previously(currentrow, currentcol+1, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
@@ -86,7 +105,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
                 else:
                     Result.setValue(currentrow, currentcol, 4)
-                    if (Result.getValue(currentrow+1, currentcol) != -255):
+                    if donepoints.done_previously(currentrow+1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
@@ -103,14 +122,14 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
                 if dem.getValue(currentrow+1, currentcol) < dem.getValue(currentrow, currentcol-1):
                     Result.setValue(currentrow, currentcol, 4)
-                    if (Result.getValue(currentrow+1, currentcol) != -255):
+                    if donepoints.done_previously(currentrow + 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
                         Result.setValue(currentrow+1, currentcol, 16)
                 else:
                     Result.setValue(currentrow, currentcol, 16)
-                    if (Result.getValue(currentrow, currentcol-1) != -255):
+                    if donepoints.done_previously(currentrow, currentcol-1, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
@@ -126,14 +145,14 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
                 if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol-1):
                     Result.setValue(currentrow, currentcol, 64)
-                    if (Result.getValue(currentrow-1, currentcol) != -255):
+                    if donepoints.done_previously(currentrow - 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
                         Result.setValue(currentrow-1, currentcol, 16)
                 else:
                     Result.setValue(currentrow, currentcol, 16)
-                    if (Result.getValue(currentrow, currentcol-1) != -255):
+                    if donepoints.done_previously(currentrow, currentcol-1, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
@@ -149,14 +168,14 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
                 if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol+1):
                     Result.setValue(currentrow, currentcol, 64)
-                    if (Result.getValue(currentrow-1, currentcol) != -255):
+                    if donepoints.done_previously(currentrow - 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
                         Result.setValue(currentrow-1, currentcol, 1)
                 else:
                     Result.setValue(currentrow, currentcol, 1)
-                    if (Result.getValue(currentrow, currentcol+1) != -255):
+                    if donepoints.done_previously(currentrow, currentcol+1, frompoint[1]):
                         # Atteinte d'un confluent
                         intheraster = False
                     else:
@@ -173,7 +192,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 intheraster = False
 
             if intheraster:
-                if (Result.getValue(currentrow, currentcol) != -255):
+                if donepoints.done_previously(currentrow, currentcol, frompoint[1]):
                     # Atteinte d'un confluent
                     intheraster = False
 
