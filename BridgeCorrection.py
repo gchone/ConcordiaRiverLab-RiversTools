@@ -40,3 +40,6 @@ def execute_BridgeCorrection(r_dem, str_bridges, str_result, messages, language 
     temp_fill = arcpy.sa.Fill(temp_dem)
     result = arcpy.sa.Con(temp_isnull, temp_fill, r_dem, "VALUE = 0")
     result.save(str_result)
+
+    arcpy.Delete_management(linebridges)
+    arcpy.Delete_management(r_linebridges)
