@@ -25,7 +25,7 @@ from EN_Interface.Flood_EN_Interface import *
 from EN_Interface.BankfullAtCS_EN_Interface import *
 from EN_Interface.FloatEuclideanAllocation_EN_Interface import *
 from EN_Interface.GaussianSmooth_EN_Interface import *
-from EN_Interface.LinearInterpolation_EN_Interface import *
+#from EN_Interface.LinearInterpolation_EN_Interface import *
 from EN_Interface.RiverWidth_EN_Interface import *
 from EN_Interface.WidthWatershed_EN_Interface import *
 from EN_Interface.ResampleFlood_EN_Interface import *
@@ -41,7 +41,7 @@ class Toolbox(object):
 
 
 
-        self.tools = [D8toD4, FlowLength, Breach, Slope, FromPoints, CS, OrientedCS, Flood, BinaryRivers, FastBankfullAtCS, FloatEuclidean, GaussianSmooth, LinearInterpolation, RiverWidth, WidthWatershed, ResampleFlood, BridgeCorrection]
+        self.tools = [D8toD4, FlowLength, Breach, Slope, FromPoints, CS, OrientedCS, Flood, BinaryRivers, FastBankfullAtCS, FloatEuclidean, GaussianSmooth, RiverWidth, WidthWatershed, ResampleFlood, BridgeCorrection]
 
 
 
