@@ -18,28 +18,29 @@ from RasterIO import *
 
 def execute_BridgeCorrection(r_dem, str_bridges, str_result, messages, language = "FR"):
 
-    arcpy.env.extent = r_dem
-    arcpy.env.snapRaster = r_dem
 
-    linebridges = arcpy.CreateScratchName("lines", data_type="FeatureClass", workspace=arcpy.env.scratchWorkspace)
-    arcpy.PolygonToLine_management(str_bridges, linebridges, "IGNORE_NEIGHBORS")
+    with arcpy.EnvManager(snapRaster=r_dem):
+        with arcpy.EnvManager(extent=r_dem):
 
-    r_linebridges = arcpy.CreateScratchName("rlines", data_type="RasterDataset", workspace=arcpy.env.scratchWorkspace)
-    arcpy.PolylineToRaster_conversion(linebridges, "ORIG_FID", r_linebridges, cellsize=r_dem)
+            linebridges = arcpy.CreateScratchName("lines", data_type="FeatureClass", workspace=arcpy.env.scratchWorkspace)
+            arcpy.PolygonToLine_management(str_bridges, linebridges, "IGNORE_NEIGHBORS")
 
-    r_polybridges = arcpy.CreateScratchName("rpoly", data_type="RasterDataset", workspace=arcpy.env.scratchWorkspace)
-    arcpy.PolygonToRaster_conversion(str_bridges, arcpy.Describe(str_bridges).OIDFieldName, r_polybridges, cellsize=r_dem)
+            r_linebridges = arcpy.CreateScratchName("rlines", data_type="RasterDataset", workspace=arcpy.env.scratchWorkspace)
+            arcpy.PolylineToRaster_conversion(linebridges, "ORIG_FID", r_linebridges, cellsize=r_dem)
 
-    r_bridges = arcpy.sa.Con(arcpy.sa.IsNull(r_polybridges)==1, r_linebridges, r_polybridges)
+            r_polybridges = arcpy.CreateScratchName("rpoly", data_type="RasterDataset", workspace=arcpy.env.scratchWorkspace)
+            arcpy.PolygonToRaster_conversion(str_bridges, arcpy.Describe(str_bridges).OIDFieldName, r_polybridges, cellsize=r_dem)
 
-    z_bridges = arcpy.sa.ZonalStatistics(r_bridges, "VALUE", r_dem, "MINIMUM")
+            r_bridges = arcpy.sa.Con(arcpy.sa.IsNull(r_polybridges)==1, r_linebridges, r_polybridges)
 
-    temp_isnull = arcpy.sa.IsNull(z_bridges)
+            z_bridges = arcpy.sa.ZonalStatistics(r_bridges, "VALUE", r_dem, "MINIMUM")
 
-    temp_dem = arcpy.sa.Con(temp_isnull, z_bridges, r_dem, "VALUE = 0")
-    temp_fill = arcpy.sa.Fill(temp_dem)
-    result = arcpy.sa.Con(temp_isnull, temp_fill, r_dem, "VALUE = 0")
-    result.save(str_result)
+            temp_isnull = arcpy.sa.IsNull(z_bridges)
 
-    arcpy.Delete_management(linebridges)
-    arcpy.Delete_management(r_linebridges)
+            temp_dem = arcpy.sa.Con(temp_isnull, z_bridges, r_dem, "VALUE = 0")
+            temp_fill = arcpy.sa.Fill(temp_dem)
+            result = arcpy.sa.Con(temp_isnull, temp_fill, r_dem, "VALUE = 0")
+            result.save(str_result)
+
+            arcpy.Delete_management(linebridges)
+            arcpy.Delete_management(r_linebridges)
