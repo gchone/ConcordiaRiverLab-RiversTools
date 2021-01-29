@@ -102,7 +102,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow, currentcol+1, 4)
-
+                        donepoints.add_point(currentrow, currentcol+1, frompoint[1])
                 else:
                     Result.setValue(currentrow, currentcol, 4)
                     if donepoints.done_previously(currentrow+1, currentcol, frompoint[1]):
@@ -110,6 +110,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow+1, currentcol, 1)
+                        donepoints.add_point(currentrow + 1, currentcol, frompoint[1])
                 currentcol = currentcol + 1
                 currentrow = currentrow + 1
 
@@ -127,6 +128,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow+1, currentcol, 16)
+                        donepoints.add_point(currentrow + 1, currentcol, frompoint[1])
                 else:
                     Result.setValue(currentrow, currentcol, 16)
                     if donepoints.done_previously(currentrow, currentcol-1, frompoint[1]):
@@ -134,6 +136,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow, currentcol-1, 4)
+                        donepoints.add_point(currentrow, currentcol-1, frompoint[1])
                 currentcol = currentcol - 1
                 currentrow = currentrow + 1
 
@@ -150,6 +153,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow-1, currentcol, 16)
+                        donepoints.add_point(currentrow - 1, currentcol, frompoint[1])
                 else:
                     Result.setValue(currentrow, currentcol, 16)
                     if donepoints.done_previously(currentrow, currentcol-1, frompoint[1]):
@@ -157,6 +161,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow, currentcol-1, 64)
+                        donepoints.add_point(currentrow, currentcol-1, frompoint[1])
                 currentcol = currentcol - 1
                 currentrow = currentrow - 1
 
@@ -173,6 +178,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow-1, currentcol, 1)
+                        donepoints.add_point(currentrow-1, currentcol, frompoint[1])
                 else:
                     Result.setValue(currentrow, currentcol, 1)
                     if donepoints.done_previously(currentrow, currentcol+1, frompoint[1]):
@@ -180,6 +186,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                         intheraster = False
                     else:
                         Result.setValue(currentrow, currentcol+1, 64)
+                        donepoints.add_point(currentrow, currentcol+1, frompoint[1])
                 currentcol = currentcol + 1
                 currentrow = currentrow - 1
 
