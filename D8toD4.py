@@ -46,7 +46,7 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
     except Exception as e:
         messages.addErrorMessage(e.message)
 
-    Result = RasterIO(r_flowdir, str_result, int, -255)
+    Result = RasterIO(r_flowdir, str_result, float, -255)
 
     donepoints = __Frompoint_paths()
 
