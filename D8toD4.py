@@ -92,7 +92,13 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 # on regarde, parmi les deux cellules adjacentes pouvant remplacer le déplacement en diagonale, quelle est celle d'élévation la plus basse, et on passe par celle-ci
                 # exemple : direction = 2 -> on se déplace en diagonale, en bas à droite
                 # on peut donc remplacer ce déplacement par aller à droite (flow direction = 1) puis aller en bas (flow direction = 4) ou bien aller en bas puis aller à droite
-                if dem.getValue(currentrow, currentcol + 1) < dem.getValue(currentrow + 1, currentcol):
+                if dem.getValue(currentrow, currentcol + 1) is None:
+                    Result.setValue(currentrow, currentcol, 1)
+                    intheraster = False
+                elif dem.getValue(currentrow + 1, currentcol) is None:
+                    Result.setValue(currentrow, currentcol, 4)
+                    intheraster = False
+                elif dem.getValue(currentrow, currentcol + 1) < dem.getValue(currentrow + 1, currentcol):
                     # La cellule à droite à une élévation plus basse que la cellule en bas, on choisie donc d'aller à droite puis ensuite en bas
                     # On modifie donc le flow direction pour aller à droite
                     Result.setValue(currentrow, currentcol, 1)
@@ -120,8 +126,13 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
 
 
             if (direction == 8):
-
-                if dem.getValue(currentrow+1, currentcol) < dem.getValue(currentrow, currentcol-1):
+                if dem.getValue(currentrow+1, currentcol) is None:
+                    Result.setValue(currentrow, currentcol, 4)
+                    intheraster = False
+                elif dem.getValue(currentrow, currentcol-1) is None:
+                    Result.setValue(currentrow, currentcol, 16)
+                    intheraster = False
+                elif dem.getValue(currentrow+1, currentcol) < dem.getValue(currentrow, currentcol-1):
                     Result.setValue(currentrow, currentcol, 4)
                     if donepoints.done_previously(currentrow + 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
@@ -145,8 +156,13 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 currentcol = currentcol - 1
 
             if (direction == 32):
-
-                if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol-1):
+                if dem.getValue(currentrow - 1, currentcol) is None:
+                    Result.setValue(currentrow, currentcol, 64)
+                    intheraster = False
+                elif dem.getValue(currentrow, currentcol-1) is None:
+                    Result.setValue(currentrow, currentcol, 16)
+                    intheraster = False
+                elif dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol-1):
                     Result.setValue(currentrow, currentcol, 64)
                     if donepoints.done_previously(currentrow - 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
@@ -170,8 +186,13 @@ def execute_D8toD4(r_flowdir, r_dem, str_frompoint, str_result, messages, langua
                 currentrow = currentrow - 1
 
             if (direction == 128):
-
-                if dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol+1):
+                if dem.getValue(currentrow-1, currentcol) is None:
+                    Result.setValue(currentrow, currentcol, 64)
+                    intheraster = False
+                elif dem.getValue(currentrow, currentcol+1) is None:
+                    Result.setValue(currentrow, currentcol, 1)
+                    intheraster = False
+                elif dem.getValue(currentrow-1, currentcol) < dem.getValue(currentrow, currentcol+1):
                     Result.setValue(currentrow, currentcol, 64)
                     if donepoints.done_previously(currentrow - 1, currentcol, frompoint[1]):
                         # Atteinte d'un confluent
